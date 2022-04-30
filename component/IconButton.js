@@ -1,6 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
-
+import {StyleSheet, TouchableOpacity, Image} from 'react-native';
 const IconButton = ({containerStyle, icon, iconStyle, onPress}) => {
   return (
     <TouchableOpacity style={containerStyle} onPress={onPress}>
@@ -20,7 +19,6 @@ const styles = StyleSheet.create({
   image: {
     width: 30,
     height: 30,
-    //tintColor: COLORS.white,
   },
 });
 export default IconButton;

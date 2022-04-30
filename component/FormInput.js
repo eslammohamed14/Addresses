@@ -39,8 +39,6 @@ const FormInput = ({
             }}>
             {label}
           </Text>
-
-          <Text style={styles.labelText}>{errorMsg}</Text>
         </View>
 
         {/* textInput */}
@@ -55,10 +53,7 @@ const FormInput = ({
 
           <TextInput
             placeholder={placeholder}
-            style={{
-              flex: 1,
-              ...inputStyle,
-            }}
+            style={[styles.textInputContainer, {...inputStyle}]}
             value={value}
             onChangeText={text => onChange(text)}
             secureTextEntry={secureTextEntry}
@@ -70,6 +65,7 @@ const FormInput = ({
 
           {appendComponent}
         </View>
+        <Text style={styles.labelText}>{errorMsg}</Text>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -92,6 +88,9 @@ const styles = StyleSheet.create({
     marginTop: SIZES.base,
     borderRadius: SIZES.radius,
     backgroundColor: COLORS.lightGray2,
+  },
+  textInputContainer: {
+    flex: 1,
   },
 });
 

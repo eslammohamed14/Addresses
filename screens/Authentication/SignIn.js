@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import {SIZES, COLORS, icons, images, LocalStorage} from '../../constants';
+import {SIZES, COLORS, icons, LocalStorage} from '../../constants';
 import AuthLayout from './AuthLayout';
 import auth from '@react-native-firebase/auth';
 
@@ -19,7 +19,6 @@ import {useNavigation} from '@react-navigation/native';
 const SignIn = props => {
   const navigation = useNavigation();
 
-  const [initializing, setInitializing] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -27,43 +26,23 @@ const SignIn = props => {
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
 
-  function onAuthStateChanged(user) {
-    setEmail(email);
-    if (initializing) setInitializing(false);
-  }
-
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber;
-  }, []);
-
   function isEnableSignIn() {
-    return (
-      email !== '' &&
-      password !== '' &&
-      emailError === '' &&
-      passwordError === ''
-    );
+    return !!email && !!password && !emailError && !passwordError;
   }
 
-  const loginUser = async (email, password) => {
+  const loginUser = async () => {
     setLoading(true);
-    console.log(email, password, 'data');
 
     await auth()
       .signInWithEmailAndPassword(email, password)
-      .then(user => {
-        console.log(user, 'user');
-        LocalStorage.storeData('Token', email);
+      .then(({user}) => {
+        LocalStorage.storeData('Token', user.getIdToken());
         setEmail('');
         setPassword('');
         setLoading(false);
-        //instead of navigate
         props.refresh();
-        //navigation.navigate('Home');
       })
       .catch(e => {
-        console.log(e, '==========');
         alert('Check Your Information');
         setLoading(false);
       });
@@ -149,18 +128,12 @@ const SignIn = props => {
                 color: COLORS.white,
               }}
               buttonContainerStyle={{
-                fontSize: SIZES.h3,
-                lineHeight: 22,
-                width: '100%',
-                borderRadius: SIZES.radius,
-                height: 60,
+                ...styles.logInButton,
                 backgroundColor: isEnableSignIn()
                   ? COLORS.primary
                   : COLORS.transparentPrimray,
               }}
-              onPress={() => {
-                loginUser(email, password);
-              }}
+              onPress={loginUser}
             />
           </View>
 
@@ -217,6 +190,13 @@ const styles = StyleSheet.create({
     fontSize: SIZES.body3,
     lineHeight: 22,
     paddingLeft: SIZES.base,
+  },
+  logInButton: {
+    fontSize: SIZES.h3,
+    lineHeight: 22,
+    width: '100%',
+    borderRadius: SIZES.radius,
+    height: 60,
   },
 });
 

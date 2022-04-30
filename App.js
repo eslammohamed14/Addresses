@@ -10,14 +10,12 @@ import SignUp from './screens/Authentication/SignUp';
 import Home from './screens/Home/Home';
 import AddPlace from './screens/Places/AddPlace';
 import PlacesList from './screens/Places/PlacesList';
-import auth from '@react-native-firebase/auth';
 
 const Stack = createStackNavigator();
 
 const App = () => {
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
     if (loading) {
@@ -29,9 +27,11 @@ const App = () => {
   }, [loading]);
 
   if (loading) {
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <ActivityIndicator color="#389167" size={'large'} />
-    </View>;
+    return (
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <ActivityIndicator color="#389167" size={'large'} />
+      </View>
+    );
   }
 
   return (

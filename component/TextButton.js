@@ -1,14 +1,12 @@
 import React from 'react';
 import {
-  View,
   Text,
   TouchableOpacity,
-  Image,
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
 
-import {COLORS, FONTS, SIZES, icons} from '../constants';
+import {SIZES} from '../constants';
 
 const TextButton = ({
   buttonContainerStyle,

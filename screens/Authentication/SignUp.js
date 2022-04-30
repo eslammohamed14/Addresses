@@ -11,7 +11,6 @@ import {
 import {SIZES, COLORS, icons, LocalStorage} from '../../constants';
 import AuthLayout from './AuthLayout';
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 
 import {FormInput, TextButton} from '../../component';
 import {utils} from '../../utils';
@@ -29,18 +28,12 @@ const SignUp = ({}) => {
   const [showPass, setShowPass] = useState(false);
 
   const isEnableSignUp = () => {
-    return (
-      email !== '' &&
-      password !== '' &&
-      emailError === '' &&
-      passwordError === ''
-    );
+    return !!email && !!password && !emailError && !passwordError;
   };
 
   /*********************sign up************************ */
 
-  const signUpUser = (email, password) => {
-    console.log(email, '\n', password, '\n', 'data');
+  const signUpUser = () => {
     setLoading(true);
     auth()
       .createUserWithEmailAndPassword(email, password)
@@ -50,7 +43,6 @@ const SignUp = ({}) => {
         navigation.navigate('SignIn');
       })
       .catch(er => {
-        console.log(er, 'signupError');
         setLoading(false);
         alert('Check Your Information');
       });
@@ -102,7 +94,6 @@ const SignUp = ({}) => {
             label={'Password'}
             secureTextEntry={!showPass}
             labelStyle={styles.labelStyle}
-            //keyboardType="password"
             autoCompleteType="password"
             onChange={value => {
               utils.validatePassword(value, setPasswordError);
@@ -142,13 +133,9 @@ const SignUp = ({}) => {
                 backgroundColor: isEnableSignUp()
                   ? COLORS.primary
                   : COLORS.transparentPrimray,
-                width: '100%',
-                height: 60,
-                borderRadius: SIZES.radius,
+                ...styles.signUpButton,
               }}
-              onPress={() => {
-                signUpUser(email, password);
-              }}
+              onPress={signUpUser}
             />
           </View>
 
@@ -205,6 +192,11 @@ const styles = StyleSheet.create({
     fontSize: SIZES.body3,
     lineHeight: 22,
     paddingLeft: SIZES.base,
+  },
+  signUpButton: {
+    width: '100%',
+    height: 60,
+    borderRadius: SIZES.radius,
   },
 });
 

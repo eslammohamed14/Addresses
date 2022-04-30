@@ -14,8 +14,9 @@ function validateEmail(value, setEmailError) {
 }
 // The password must contain at least one lowercase letter, an uppercase letter, digit, and a special character
 
-function isValidPassword(value, setPasswordError) {
-  let re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
+function isValidPassword(value) {
+  let re =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\._\-\/\\|!@#$%^&*])(?=.{8,})/;
   return re.test(String(value));
 }
 
@@ -25,7 +26,9 @@ function validatePassword(value, setPasswordError) {
   } else if (isValidPassword(value)) {
     setPasswordError('');
   } else {
-    setPasswordError('Invalid Password');
+    setPasswordError(
+      'The password must contain at least one lowercase letter, an uppercase letter, digit, and a special character',
+    );
   }
 }
 

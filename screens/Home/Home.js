@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {View, Text, Image} from 'react-native';
 import {TextButton} from '../../component';
-import {SIZES, COLORS, icons, images, LocalStorage} from '../../constants';
+import {SIZES, COLORS, icons, LocalStorage} from '../../constants';
 import auth from '@react-native-firebase/auth';
 import MapView, {Marker, Callout} from 'react-native-maps';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {allPlaces, utils} from '../../utils';
+import {allPlaces} from '../../utils';
 
 const Home = props => {
   const navigation = useNavigation();
@@ -27,10 +27,9 @@ const Home = props => {
       .then(() => {
         props.refresh();
         LocalStorage.clearStorage();
-        console.log('User signed out!');
       })
       .catch(er => {
-        console.log(er, 'logout error');
+        LocalStorage.clearStorage();
       });
   };
   return (
@@ -54,8 +53,12 @@ const Home = props => {
             <Marker coordinate={mark}>
               <Callout
                 onPress={() => {
+                  const selectedMark = mark;
+
+                  setMark(null);
+
                   navigation.navigate('AddPlace', {
-                    coordinates: mark,
+                    coordinates: selectedMark,
                     header: 'ADD NEW PLACE',
                   });
                 }}
